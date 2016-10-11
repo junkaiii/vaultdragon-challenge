@@ -52,16 +52,26 @@ router.post('/keys', function(req, res) {
   });
 });
 
-//get route
-router.get('/keys', function(req,res) {
-  Key.find(function(req,res){
+// //get all keys
+// router.get('/keys', function(req,res) {
+//   Key.find(function(err, keys){
+//     if (err) {
+//       return res.send(err);
+//     }
+//     return res.json(keys);
+//   });
+// });
+
+//get keys according to id
+router.get('/keys/:key', function(req,res) {
+  console.log(req.params.key);
+  Key.findOne({key: req.params.key}, function(err, keys){
     if (err) {
       return res.send(err);
     }
     return res.json(keys);
   });
 });
-
 
 
 
