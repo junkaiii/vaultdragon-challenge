@@ -38,8 +38,7 @@ router.get('/', function(req, res) {
 app.use('/api', router);
 
 //post route
-router.post('/key', function(req, res) {
-  // console.log(req.body.key);
+router.post('/keys', function(req, res) {
   var input = new Key(); //create new key instance
   input.key = req.body.key; //set key value from input
 
@@ -51,8 +50,21 @@ router.post('/key', function(req, res) {
       message: 'key saved!'
     });
   });
-
 });
+
+//get route
+router.get('/keys', function(req,res) {
+  Key.find(function(req,res){
+    if (err) {
+      return res.send(err);
+    }
+    return res.json(keys);
+  });
+});
+
+
+
+
 //connecting to mongodb
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://junkaiii:4480866l@ds139715.mlab.com:39715/vaultdragon-codetest');
