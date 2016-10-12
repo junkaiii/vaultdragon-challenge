@@ -38,9 +38,10 @@ router.get('/', function(req, res) {
 app.use('/api', router);
 
 //post route
-router.post('/keys', function(req, res) {
+router.post('/key', function(req, res) {
   var input = new Key(); //create new key instance
   input.key = req.body.key; //set key value from input
+  input.data = req.body.data;
 
   input.save(function(err) {
     if (err) {
@@ -63,7 +64,7 @@ router.post('/keys', function(req, res) {
 // });
 
 //get keys according to id
-router.get('/keys/:key', function(req,res) {
+router.get('/key/:key', function(req,res) {
   console.log(req.params.key);
   Key.findOne({key: req.params.key}, function(err, keys){
     if (err) {
