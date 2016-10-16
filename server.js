@@ -4,8 +4,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var router = express.Router();
-var Key = require('./models/key');
+var Object = require('./models/object');
 
 
 //setting up port
@@ -21,60 +20,76 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-//set up middleware
-router.use(function(req, res, next) {
-  console.log('something is happening');
-  next();
-});
 
 //test route
-router.get('/', function(req, res) {
+app.get('/', function(req, res) {
   res.json({
-    message: 'api connected!'
+    message: 'API connected'
   });
 });
 
-//set all routes to be with /api prefix
-app.use('/api', router);
-
 //post route
-router.post('/key', function(req, res) {
-  var input = new Key(); //create new key instance
-  input.key = req.body.key; //set key value from input
+app.post('/object', function(req, res) {
+  var input = new Object();
+
+  var d = new Date();
+  var n = d.getTime();
+
+  input.object = req.body.object;
   input.data = req.body.data;
+  input.utc = n;
 
   input.save(function(err) {
     if (err) {
       return res.send(err);
     }
     return res.json({
-      message: 'key saved!'
+      message: 'object saved!'
     });
   });
 });
 
-// //get all keys
-// router.get('/keys', function(req,res) {
-//   Key.find(function(err, keys){
-//     if (err) {
-//       return res.send(err);
-//     }
-//     return res.json(keys);
-//   });
-// });
-
-//get keys according to id
-router.get('/key/:key', function(req,res) {
-  console.log(req.params.key);
-  Key.findOne({key: req.params.key}, function(err, keys){
+//get all objects
+app.get('/objects', function(req, res) {
+  Object.find(function(err, objects) {
     if (err) {
       return res.send(err);
     }
-    return res.json(keys);
+    return res.json(objects);
   });
 });
 
 
+
+//get object according to id
+app.get('/object/:object', function(req, res) {
+  console.log(req.query.timestamp);
+  if (req.query.timestamp != null) {
+    Object.findOne({
+      object: req.params.object,
+      utc: {
+        $lt: req.query.timestamp
+      }
+    }, function(err, object) {
+      if (err) {
+        return res.send(err);
+      }
+      return res.json(object);
+    });
+  } else {
+    Object.find({
+      object: req.params.object
+    }).sort({utc: -1})
+      .limit(1)
+      .exec(function(err, object){
+        if (err) {
+          return res.send(err);
+        }
+        return res.json(object);
+      });
+
+  }
+});
 
 //connecting to mongodb
 var mongoose = require('mongoose');
