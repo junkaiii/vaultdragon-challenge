@@ -65,17 +65,19 @@ app.get('/objects', function(req, res) {
 app.get('/object/:object', function(req, res) {
   console.log(req.query.timestamp);
   if (req.query.timestamp != null) {
-    Object.findOne({
+    Object.find({
       object: req.params.object,
       utc: {
-        $lt: req.query.timestamp
+        $lte: req.query.timestamp
       }
-    }, function(err, object) {
-      if (err) {
-        return res.send(err);
-      }
-      return res.json(object);
-    });
+    }).sort({utc: -1})
+      .limit(1)
+      .exec(function(err, object){
+        if (err) {
+          return res.send(err);
+        }
+        return res.json(object);
+      });
   } else {
     Object.find({
       object: req.params.object
