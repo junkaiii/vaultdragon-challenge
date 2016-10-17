@@ -6,14 +6,6 @@ var app = express();
 var bodyParser = require('body-parser');
 var Object = require('./models/object');
 
-
-//setting up port
-var port = process.env.PORT || 1337;
-
-//start Server
-app.listen(port);
-console.log('server up');
-
 //configure app to use bodyParser() to endable us to get data from POST
 app.use(bodyParser.urlencoded({
   extended: true
@@ -95,3 +87,10 @@ app.get('/object/:object', function(req, res) {
 //connecting to mongodb
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://junkaiii:4480866l@ds139715.mlab.com:39715/vaultdragon-codetest');
+
+//setting up port
+var port = process.env.PORT || 1337;
+
+//start Server
+app.listen(port);
+console.log('server up');
