@@ -1,3 +1,4 @@
+var app = require('../app');
 var frisby = require('frisby');
 
 function randomInt(min, max) {
