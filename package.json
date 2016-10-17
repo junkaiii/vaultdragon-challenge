@@ -2,21 +2,22 @@
   "name": "vaultdragon_challenge",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon",
-    "test": "jasmine-node spec"
+    "test": "jasmine-node spec --forceexit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {},
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "mongoose": "^4.6.3",
+  "devDependencies": {
     "frisby": "^0.8.5",
     "jasmine-node": "^1.14.5",
     "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.6.3"
   }
 }
