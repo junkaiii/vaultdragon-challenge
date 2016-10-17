@@ -32,12 +32,11 @@ app.get('/', function(req, res) {
 app.post('/object', function(req, res) {
   var input = new Object();
 
-  var d = new Date();
-  var n = d.getTime();
+  var ts = Math.round((new Date()).getTime() / 1000);
 
   input.object = req.body.object;
   input.data = req.body.data;
-  input.utc = n;
+  input.utc = ts;
 
   input.save(function(err) {
     if (err) {
