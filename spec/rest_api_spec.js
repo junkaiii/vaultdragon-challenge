@@ -8,7 +8,7 @@ var name_to_test = 'john';
 var utc_number = randomInt(1476670462, 2147483647).toString();
 
 frisby.create('POST to /object endpoint')
-.post('/object/',
+.post('http://localhost:1337/object/',
   { data: 'abc', obj: 'john' },
   {json: true}
   )
@@ -17,7 +17,7 @@ frisby.create('POST to /object endpoint')
 .toss();
 
 frisby.create('GET JSON data from params')
-  .get('/object/' + name_to_test)
+  .get('http://localhost:1337/object/' + name_to_test)
   .expectStatus(200)
   .expectHeader('Content-Type', 'application/json; charset=utf-8')
   .expectJSON('?',{
@@ -31,7 +31,7 @@ frisby.create('GET JSON data from params')
 .toss();
 
 frisby.create('GET JSON data from query')
-  .get('/object/' + name_to_test + '?timestamp=' + utc_number)
+  .get('http://localhost:1337/object/' + name_to_test + '?timestamp=' + utc_number)
   .expectStatus(200)
   .expectHeader('Content-Type', 'application/json; charset=utf-8')
   .expectJSON('?',{
