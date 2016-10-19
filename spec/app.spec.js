@@ -1,6 +1,8 @@
 var app = require('../app');
 var supertest = require('supertest');
 var should = require('chai').should();
+var expect = require('chai').expect();
+
 
 function randomInt(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -25,23 +27,29 @@ describe("POST to /object endpoint", function() {
         console.log(res.body);
         console.log(propType[index_number]);
         res.body.should.have.property(propType[index_number]);
+        store_utc = res.body.utc;
         done();
       });
   });
 });
 
-// describe("GET /object endpoint", function() {
-//   it("returns object saved or cannot be found", function(done) {
-//     supertest(app)
-//       .post('/object')
-//       .send(obj)
-//       .expect(200)
-//       .end(function(){
-//         supertest(app)
-//           .get('/' + )
-//       });
-//   });
-// });
+describe("GET /object endpoint", function() {
+  it("returns object saved or cannot be found", function(done) {
+    supertest(app)
+      .post('/object')
+      .send(obj)
+      .expect(200)
+      .end(function(){
+        supertest(app)
+          .get('/object/' + obj[propType[index_number]])
+          .expect(200)
+          .end(function(err, res){
+            res.body.should.have.property(propType[index_number]);
+            expect(res.body.utc > store_utc);
+          });
+      });
+  });
+});
 
 
 // var checkProperty = function(res) {
