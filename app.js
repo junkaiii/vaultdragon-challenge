@@ -4,7 +4,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var Object = require('./models/object');
+var Obj = require('./models/object');
 
 //configure app to use bodyParser() to endable us to get data from POST
 app.use(bodyParser.urlencoded({
@@ -22,13 +22,13 @@ app.get('/', function(req, res) {
 
 //post route
 app.post('/object', function(req, res) {
-  var input = new Object();
+  var input = new Obj();
 
   var ts = Math.round((new Date()).getTime() / 1000);
 
   var obj = req.body;
-  // var propType = Object.keys(req.body)[0];
-  // var property = req.body[Object.keys(req.body)[0]];
+  var propType = Object.keys(req.body)[0];
+  var property = req.body[Object.keys(req.body)[0]];
   console.log(Object.keys(obj));
 
   //req.body[Object.key(req.body)[0]]
