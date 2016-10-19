@@ -50,7 +50,7 @@ app.post('/object', function(req, res) {
 
 //get all objects
 app.get('/objects', function(req, res) {
-  Object.find(function(err, objects) {
+  Obj.find(function(err, objects) {
     if (err) {
       return res.send(err);
     }
@@ -64,7 +64,7 @@ app.get('/objects', function(req, res) {
 app.get('/object/:object', function(req, res) {
   console.log(req.query.timestamp);
   if (req.query.timestamp != null) {
-    Object.find({
+    Obj.find({
       object: req.params.object,
       utc: {
         $lte: req.query.timestamp
@@ -78,7 +78,7 @@ app.get('/object/:object', function(req, res) {
         return res.json(object);
       });
   } else {
-    Object.find({
+    Obj.find({
       object: req.params.object
     }).sort({utc: -1})
       .limit(1)
