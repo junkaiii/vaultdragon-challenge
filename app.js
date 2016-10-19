@@ -26,8 +26,14 @@ app.post('/object', function(req, res) {
 
   var ts = Math.round((new Date()).getTime() / 1000);
 
-  input.object = req.body.object;
-  input.data = req.body.data;
+  var obj = {cat: "meow"};
+  // var propType = Object.keys(req.body)[0];
+  // var property = req.body[Object.keys(req.body)[0]];
+  console.log(Object.keys(obj));
+
+  //req.body[Object.key(req.body)[0]]
+  input.object = propType;
+  input.data = property;
   input.utc = ts;
 
   input.save(function(err) {
@@ -35,7 +41,9 @@ app.post('/object', function(req, res) {
       return res.send(err);
     }
     return res.json({
-      message: 'object saved!'
+      key: propType,
+      value: property,
+      timestamp: ts
     });
   });
 });
@@ -94,3 +102,5 @@ var port = process.env.PORT || 1337;
 //start Server
 app.listen(port);
 console.log('server up');
+
+module.exports = app;
