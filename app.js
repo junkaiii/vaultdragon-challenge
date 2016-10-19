@@ -29,7 +29,7 @@ app.post('/object', function(req, res) {
   var obj = req.body;
   var propType = Object.keys(req.body)[0];
   var property = req.body[Object.keys(req.body)[0]];
-  console.log(Object.keys(obj));
+  // console.log(Object.keys(obj));
 
   //req.body[Object.key(req.body)[0]]
   input.object = propType;
@@ -40,11 +40,10 @@ app.post('/object', function(req, res) {
     if (err) {
       return res.send(err);
     }
-    return res.json({
-      key: propType,
-      value: property,
-      timestamp: ts
-    });
+    output = {};
+    output[propType] = input.data;
+    output.timestamp = input.utc;
+    return res.json(output);
   });
 });
 
@@ -62,31 +61,50 @@ app.get('/objects', function(req, res) {
 
 //get object according to id
 app.get('/object/:object', function(req, res) {
-  console.log(req.query.timestamp);
   if (req.query.timestamp != null) {
     Obj.find({
-      object: req.params.object,
-      utc: {
-        $lte: req.query.timestamp
-      }
-    }).sort({utc: -1})
+        object: req.params.object,
+        utc: {
+          $lte: req.query.timestamp
+        }
+      }).sort({
+        utc: -1
+      })
       .limit(1)
-      .exec(function(err, object){
+      .exec(function(err, objects) {
         if (err) {
           return res.send(err);
         }
-        return res.json(object);
+        if (objects.length !== 0) {
+          output = {};
+          property = objects[0].object;
+          output[property] = objects[0].data;
+          output.timestamp = objects[0].utc;
+          return res.json(output);
+        } else {
+          return res.json({message: 'not found!'});
+        }
       });
   } else {
     Obj.find({
-      object: req.params.object
-    }).sort({utc: -1})
+        object: req.params.object
+      }).sort({
+        utc: -1
+      })
       .limit(1)
-      .exec(function(err, object){
+      .exec(function(err, objects) {
         if (err) {
           return res.send(err);
         }
-        return res.json(object);
+        if (objects.length !== 0) {
+          output = {};
+          property = objects[0].object;
+          output[property] = objects[0].data;
+          output.timestamp = objects[0].utc;
+          return res.json(output);
+        } else {
+          return res.json({message: 'not found!'});
+        }
       });
 
   }
