@@ -119,6 +119,6 @@ var port = process.env.PORT || 1337;
 
 //start Server
 app.listen(port);
-console.log('server up');
+// console.log('server up');
 
 module.exports = app;
