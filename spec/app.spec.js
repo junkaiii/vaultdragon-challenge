@@ -33,8 +33,8 @@ describe("POST to /object endpoint", function() {
   });
 });
 
-describe("GET /object", function() {
-  it("returns object saved or cannot be found", function(done) {
+describe("GET /object without timestamp", function() {
+  it("returns the latest found object", function(done) {
     supertest(app)
       .post('/object')
       .send(obj)
@@ -48,26 +48,37 @@ describe("GET /object", function() {
             expect(res.body.utc > store_utc).to.be.ok;
             //latest utc number generated from second post
             store_utc2 = res.body.utc;
-            //test exact timestamp
-            supertest(app)
-              .get('/object/' + obj[propType[index_number]] + '?timestamp=' + store_utc2)
-              .expect(200)
-              .end(function(err, res) {
-                //responds with the same object because timestamp can be found
-                expect(store_utc2 == res.body.utc).to.be.ok;
-                done();
-              });
-            //test exact timestamp minus 1
-            supertest(app)
-              .get('/object/' + obj[propType[index_number]] + '?timestamp=' + (store_utc2 - 1))
-              .expect(200)
-              .end(function(err, res) {
-                //responds with the object created with the first post - timestamp cannot be found and therefore show the previous one
-                expect(store_utc == res.body.utc).to.be.ok;
-                done();
-              });
             done();
           });
+        done();
+      });
+  });
+});
+
+describe("GET /object with timestamp minus one comapred to last posted object", function() {
+  it("returns the object before the last posted object", function(done) {
+    //test exact timestamp minus 1
+    supertest(app)
+      .get('/object/' + obj[propType[index_number]] + '?timestamp=' + (store_utc2 - 1))
+      .expect(200)
+      .end(function(err, res) {
+        //responds with the object created with the first post - timestamp cannot be found and therefore show the previous one
+        expect(store_utc == res.body.utc).to.be.ok;
+        done();
+      });
+  });
+});
+
+
+describe("GET /object with timestamp similar to last posted object", function() {
+  it("returns the last posted object", function(done) {
+    //test exact timestamp
+    supertest(app)
+      .get('/object/' + obj[propType[index_number]] + '?timestamp=' + store_utc2)
+      .expect(200)
+      .end(function(err, res) {
+        //responds with the same object because timestamp can be found
+        expect(store_utc2 == res.body.utc).to.be.ok;
         done();
       });
   });
