@@ -26,7 +26,7 @@ app.post('/object', function(req, res) {
 
   var ts = Math.round((new Date()).getTime() / 1000);
 
-  var obj = {cat: "meow"};
+  var obj = req.body;
   // var propType = Object.keys(req.body)[0];
   // var property = req.body[Object.keys(req.body)[0]];
   console.log(Object.keys(obj));
